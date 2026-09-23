@@ -81,7 +81,7 @@ struct nhaHang {
 
     // Hien thi danh sach mon an
     void showMenu() const {
-        cout << "\n=== MENU CUA HANG ===\n";
+        cout << "\t \n=== MENU CUA HANG ===\n";
         for (int i = 0; i < foodCount; i++) {
             foods[i].output();
         }
@@ -158,7 +158,47 @@ struct nhaHang {
         cout << "Dat hang thanh cong \n";
     }
 
+    // Hien thi danh sach don hang
+    void showOrders() const {
+        cout << "\n=== DANH SACH DON HANG ===\n";
+        for (int i = 0; i < orderCount; i++) {
+            orders[i].output();
+        }
+    }
+
+    // Tim don hang theo ma
+    void findOrder(string orderId) const {
+        for (int i = 0; i < orderCount; i++) {
+            if (orders[i].id == orderId) {
+                orders[i].output();
+                return;
+            }
+        }
+        cout << "Khong tim thay don hang!\n";
+    }
+
+    // Thong ke doanh thu don hoan thanh
+    void reportRevenue() const {
+        double total = 0;
+        for (int i = 0; i < orderCount; i++) {
+            if (orders[i].status == "Hoan thanh") {
+                total += orders[i].getTotalPrice();
+            }
+        }
+        cout << "\nTong doanh thu cac don da Hoan thanh: " << total << " VND\n";
+    }
     
+    // Cap nhat trang thai don hang
+    void updateOrderStatus(string orderId, string newStatus) {
+        for (int i = 0; i < orderCount; i++) {
+            if (orders[i].id == orderId) {
+                orders[i].status = newStatus;
+                cout << "Cap nhat trang thai don thanh cong!\n";
+                return;
+            }
+        }
+        cout << "Khong tim thay don hang!\n";
+    }
 };
 
 int main()
@@ -167,5 +207,10 @@ int main()
     nh.inputInfo(); 
     nh.addFood();
     nh.showMenu();
+    nh.createOrder();
+    nh.showOrders();
+    nh.updateOrderStatus("SHOPEE123", "Hoan thanh");
+    nh.reportRevenue();
 
+    return 0;
 }
