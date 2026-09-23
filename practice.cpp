@@ -24,6 +24,7 @@ struct Food {
         cout << "\t[Ma: " << id << " | Ten: " << name 
              << " | Gia: " << price << " | Ton kho: " << quantity << "]\n";
     }
+    
 
 };
 
@@ -37,6 +38,19 @@ struct Order {
     int quantity;
     string status; // Cho giao, hoan thanh, huy
 
+    // Tinh tong tien cua don hang
+    double getTotalPrice() const {
+        return food.price * quantity;
+    }
+
+    void output() const {
+        cout << "------------------------------------\n";
+        cout << "Ma don: " << id << " | Khach hang: " << customerName << "\n";
+        cout << "Dia chi: " << address << "\n";
+        cout << "Mon dat: " << food.name << " x " << quantity << "\n";
+        cout << "Tong tien: " << getTotalPrice() << " VND | Trang thai: " << status << "\n";
+        cout << "------------------------------------\n";
+    }
 };
 
 struct nhaHang {
@@ -96,6 +110,55 @@ struct nhaHang {
         }
         cout << "Khong tim thay ma mon an!\n";
     }
+    
+    // Tao don hang va ktra kho
+    void createOrder(){
+        if (orderCount >= 100) return;
+
+        string foodId;
+        int orderQty;
+        cout << " Nhap ma mon muon dat: ";
+        getline(cin, foodId);
+
+        int foodIndex = -1;
+        for (int i = 0; i < foodCount; i++) {
+            if (foods[i].id == foodId) {
+                foodIndex = i;
+                break;
+            }
+        }
+
+        if (foodIndex == -1 || foods[foodIndex].quantity < 1) {
+            cout << "Mon an khong ton tai hoac het hang\n";
+            return;
+        }
+
+        cout << "Nhap so luong muon dat: ";
+        cin >> orderQty;
+        cin.ignore();
+
+        if (orderQty > foods[foodIndex].quantity) {
+            cout << "So luong dat vuot qua ton kho\n";
+            return;
+        }
+        foods[foodIndex].quantity -= orderQty;
+
+        Order ord;
+        cout << "Nhap ma don hang: ";
+        getline(cin, ord.id);
+        cout << "Nhap ten khach hang: ";
+        getline(cin, ord.customerName);
+        cout << "Nhap dia chi: ";
+        getline(cin, ord.address);
+        ord.food = foods[foodIndex];
+        ord.quantity = orderQty;
+        ord.status = "Cho giao";
+
+        orders[orderCount++] = ord;
+        cout << "Dat hang thanh cong \n";
+    }
+
+    
 };
 
 int main()
